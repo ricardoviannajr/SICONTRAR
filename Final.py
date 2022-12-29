@@ -3,17 +3,10 @@ import tkinter.messagebox
 import tkinter.filedialog
 import csv
 import os
-#import subprocess
 import webbrowser
-#import time
-#from reportlab.pdfgen import canvas
-#from tabulate import tabulate
 from reportlab.lib import colors
-#from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.pagesizes import A4
-#from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.platypus import SimpleDocTemplate, Paragraph, PageTemplate, \
-    BaseDocTemplate, Table, TableStyle
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from unidecode import unidecode
 from PIL import Image, ImageTk
 
@@ -48,7 +41,7 @@ def adicionar():
     localizacao_estante = localizacao_estante_entry.get()
     localizacao_prateleira = localizacao_prateleira_entry.get()
 
-    #Verifica se todos os campos foram preenchidos
+    # Verifica se todos os campos foram preenchidos
     if not all([data_transferencia, numero_documento, sigla_unidade, nome_unidade,
                 numero_cx_escritorio, numero_cx_custodia, codigo_classificacao,
                 datas_limite, descricao_documentos, prazo_guarda, destinacao,
@@ -57,7 +50,7 @@ def adicionar():
         tk.messagebox.showerror('Erro', 'Todos os campos são obrigatórios.')
         return
 
-    #Adiciona os dados no arquivo CSV
+    # Adiciona os dados no arquivo CSV
     with open(caminho_arquivo, 'a', newline='') as arquivo_csv:
         writer = csv.writer(arquivo_csv)
         writer.writerow([data_transferencia, numero_documento, sigla_unidade, nome_unidade,
@@ -99,14 +92,22 @@ def pesquisar():
             dados = f"{linha[0]} {linha[1]} {linha[2]} {linha[3]} {linha[4]} {linha[5]} {linha[6]} {linha[7]} " \
                     f"{linha[8]} {linha[9]} {linha[10]} {linha[11]} {linha[12]} {linha[13]} {linha[14]} {linha[15]}"
             if termo.lower() in unidecode(dados).lower():
-                resultado += f"Data de transferência: {linha[0]}, Número do documento de encaminhamento: {linha[1]}, " \
-                             f"Unidade produtora (sigla): {linha[2]}, Unidade produtora (nome): {linha[3]}, " \
-                             f"Nº CX escritório: {linha[4]}, Nº caixa custódia: {linha[5]}, " \
-                             f"Código classificação documental: {linha[6]}, Datas-limite: {linha[7]}, " \
-                             f"Descrição dos documentos: {linha[8]}, Prazo de guarda - arquivo intermediário: {linha[9]}, " \
-                             f"Destinação: {linha[10]}, Localização unidade de arquivo: {linha[11]}, " \
-                             f"Localização conjunto: {linha[12]}, Localização rua: {linha[13]}, " \
-                             f"Localização estante: {linha[14]}, Localização prateleira: {linha[15]}\n"
+                resultado += f"Data de transferência: {linha[0]}, " \
+                             f"Número do documento de encaminhamento: {linha[1]}, " \
+                             f"Unidade produtora (sigla): {linha[2]}, " \
+                             f"Unidade produtora (nome): {linha[3]}, " \
+                             f"Nº CX escritório: {linha[4]}, " \
+                             f"Nº caixa custódia: {linha[5]}, " \
+                             f"Código classificação documental: {linha[6]}, " \
+                             f"Datas-limite: {linha[7]}, " \
+                             f"Descrição dos documentos: {linha[8]}, " \
+                             f"Prazo de guarda - arquivo intermediário: {linha[9]}, " \
+                             f"Destinação: {linha[10]}, " \
+                             f"Localização unidade de arquivo: {linha[11]}, " \
+                             f"Localização conjunto: {linha[12]}, " \
+                             f"Localização rua: {linha[13]}, " \
+                             f"Localização estante: {linha[14]}, " \
+                             f"Localização prateleira: {linha[15]}\n"
 
     # Limpa o campo de entrada
     pesquisa_entry.delete(0, 'end')
@@ -131,11 +132,23 @@ def gerar_relatorio():
         for i, linha in enumerate(reader):
             if i == 0:
                 # Adiciona os títulos das colunas na primeira linha
-                dados.append(['Data de transferencia ao arquivo de custodia', 'Número do documento de encaminhamento',
-                              'Unidade Produtora Sigla', 'Unidade Produtora Nome', 'Nº CX escritorio', 'Nº Caixa Custódia',
-                              'Codigo classificaçao documental', 'Datas-limite', 'Descriçao dos documentos',
-                              'Prazo de Guarda - Arquivo Intermediário', 'Destinaçao', 'Localizaçao Unidade de arquivo',
-                              'Localizaçao Conjunto', 'Localizaçao Rua', 'Localizaçao Estante', 'Localizaçao Prateleira'])
+                dados.append(['Data de transferencia ao arquivo de custodia',
+                              'Número do documento de encaminhamento',
+                              'Unidade Produtora Sigla',
+                              'Unidade Produtora Nome',
+                              'Nº CX escritorio',
+                              'Nº Caixa Custódia',
+                              'Codigo classificaçao documental',
+                              'Datas-limite',
+                              'Descriçao dos documentos',
+                              'Prazo de Guarda - Arquivo Intermediário',
+                              'Destinaçao',
+                              'Localizaçao Unidade de arquivo',
+                              'Localizaçao Conjunto',
+                              'Localizaçao Rua',
+                              'Localizaçao Estante',
+                              'Localizaçao Prateleira'
+                              ])
             else:
                 dados.append(linha)
 
@@ -170,20 +183,18 @@ def gerar_relatorio():
     # Adiciona o conteúdo do relatório
     doc.build([tabela])
 
-    # Aguarda para abrir o arquivo
-    #time.sleep(5)
-
     # Abre o arquivo PDF
     webbrowser.open(caminho_arquivo_pdf)
 
+
 def sair():
-  root.destroy()
+    root.destroy()
+
 
 root = tk.Tk()
 root.title('Sistema de Controle de Arquivo')
 
-#Logo
-
+# Logo
 logo = Image.open('infralogo.png')
 lb = ImageTk.PhotoImage(logo)
 label1 = tkinter.Label(image=lb)
@@ -228,7 +239,7 @@ localizacao_estante_entry = tk.Entry(root)
 localizacao_prateleira_label = tk.Label(root, text='Localização prateleira:')
 localizacao_prateleira_entry = tk.Entry(root)
 
-#Botões
+# Botões
 inserir_button = tk.Button(root, text='Inserir', command=adicionar)
 pesquisa_label = tk.Label(root, text='Pesquisa:')
 pesquisa_entry = tk.Entry(root)
@@ -270,14 +281,13 @@ localizacao_estante_entry.grid(row=16, column=1, padx=10, pady=10, sticky='nswe'
 localizacao_prateleira_label.grid(row=17, column=0, padx=10, pady=10, sticky='nswe')
 localizacao_prateleira_entry.grid(row=17, column=1, padx=10, pady=10, sticky='nswe')
 
-## Posicionamento dos botões
+# Posicionamento dos botões
 inserir_button.grid(row=18, column=0, padx=10, pady=10, sticky='nswe')
 pesquisa_label.grid(row=19, column=0, padx=10, pady=10, sticky='nswe')
 pesquisa_entry.grid(row=19, column=1, padx=10, pady=10, sticky='nswe')
 pesquisar_button.grid(row=20, column=0, padx=10, pady=10, sticky='nswe')
 relatorio_button.grid(row=21, column=0, padx=10, pady=10, sticky='nswe')
 sair_button.grid(row=22, column=0, padx=10, pady=10, sticky='nswe')
-
 
 
 root.mainloop()
