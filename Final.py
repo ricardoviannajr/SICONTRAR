@@ -15,11 +15,11 @@ if not os.path.exists('caminho_arquivo.txt'):
     # Pergunta ao usuário de onde importar o arquivo
     caminho_arquivo = tkinter.filedialog.askopenfilename()
     # Salva o caminho do arquivo em um arquivo de texto
-    with open('caminho_arquivo.txt', 'w') as arquivo:
+    with open('caminho_arquivo.txt', 'w', encoding = 'unicode_escape') as arquivo:
         arquivo.write(caminho_arquivo)
 else:
     # Lê o caminho do arquivo do arquivo de texto
-    with open('caminho_arquivo.txt', 'r') as arquivo:
+    with open('caminho_arquivo.txt', 'r', encoding = 'unicode_escape') as arquivo:
         caminho_arquivo = arquivo.read()
 
 
@@ -51,7 +51,7 @@ def adicionar():
         return
 
     # Adiciona os dados no arquivo CSV
-    with open(caminho_arquivo, 'a', newline='') as arquivo_csv:
+    with open(caminho_arquivo, 'a', encoding = 'unicode_escape', newline='') as arquivo_csv:
         writer = csv.writer(arquivo_csv)
         writer.writerow([data_transferencia, numero_documento, sigla_unidade, nome_unidade,
                          numero_cx_escritorio, numero_cx_custodia, codigo_classificacao,
@@ -86,13 +86,14 @@ def pesquisar():
         tk.messagebox.showerror('Erro', 'O campo de pesquisa é obrigatório.')
         return
 
-    with open(caminho_arquivo, 'r') as arquivo_csv:
+    with open(caminho_arquivo, 'r', encoding = 'unicode_escape') as arquivo_csv:
         reader = csv.reader(arquivo_csv)
         for linha in reader:
-            dados = f"{linha[0]} {linha[1]} {linha[2]} {linha[3]} {linha[4]} {linha[5]} {linha[6]} {linha[7]} " \
+            if len(linha) >= 16:
+                dados = f"{linha[0]} {linha[1]} {linha[2]} {linha[3]} {linha[4]} {linha[5]} {linha[6]} {linha[7]} " \
                     f"{linha[8]} {linha[9]} {linha[10]} {linha[11]} {linha[12]} {linha[13]} {linha[14]} {linha[15]}"
-            if termo.lower() in unidecode(dados).lower():
-                resultado += f"Data de transferência: {linha[0]}, " \
+                if termo.lower() in unidecode(dados).lower():
+                    resultado += f"Data de transferência: {linha[0]}, " \
                              f"Número do documento de encaminhamento: {linha[1]}, " \
                              f"Unidade produtora (sigla): {linha[2]}, " \
                              f"Unidade produtora (nome): {linha[3]}, " \
@@ -120,14 +121,14 @@ def pesquisar():
 
 def gerar_relatorio():
     # Lê o caminho do arquivo do arquivo de texto
-    with open('caminho_arquivo.txt', 'r') as arquivo:
+    with open('caminho_arquivo.txt', 'r', encoding = 'unicode_escape') as arquivo:
         caminho_arquivo_csv = arquivo.read()
 
     # Inicializa uma lista para armazenar os dados
     dados = []
 
     # Lê todas as linhas da base de dados e adiciona na lista de dados
-    with open(caminho_arquivo_csv, 'r') as arquivo_csv:
+    with open(caminho_arquivo_csv, 'r', encoding = 'unicode_escape') as arquivo_csv:
         reader = csv.reader(arquivo_csv)
         for i, linha in enumerate(reader):
             if i == 0:
