@@ -1,0 +1,1 @@
+Data de Transferência,Número do Documento,Sigla da Unidade,Nome da Unidade,Número da Caixa de Escritório,Número da Caixa de Custódia,Código de Classificação,Datas Limite,Descrição dos Documentos,Prazo de Guarda,Destinação,Localização da Unidade,Localização do Conjunto,Localização da Rua,Localização da Estante,Localização da Prateleira
