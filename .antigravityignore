@@ -1,0 +1,19 @@
+﻿# DEPRECADO (stub temporÃ¡rio)
+# Novo caminho oficial: antigravity/.antigravityignore
+# Remover este arquivo apÃ³s a migraÃ§Ã£o completa dos consumidores.
+
+.antigravity/
+.antigravity/skills/
+.temp_skills_fetch/
+skills_index.json
+.git/
+node_modules/
+dist/
+out/
+build/
+bin/
+obj/
+*.log
+session_log/
+.vscode/
+.env

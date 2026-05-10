@@ -1,0 +1,70 @@
+# Antigravity Ignore
+# Padrões que o Antigravity ignora no contexto. No Cursor use também .cursorignore (política paralela; .vscode/ pode ficar de fora no Cursor).
+
+# Antigravity Temporary Files
+.antigravity/
+.antigravity/skills/
+.temp_skills_fetch/
+skills_index.json
+
+# Version Control
+.git/
+.svn/
+.hg/
+
+# Dependencies
+node_modules/
+vendor/
+packages/
+jspm_packages/
+
+# Build/Output
+dist/
+out/
+build/
+bin/
+obj/
+*.exe
+*.dll
+*.so
+
+# Logs & Database
+*.log
+*.sqlite
+*.db
+session_log/
+
+# OS/IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.bak
+
+# Environment / Secret
+.env
+*.pem
+*.key
+.env.*
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+.pytest_cache/
+
+# Web / Frameworks
+.next/
+.turbo/
+public/assets/
+coverage/
+**/__snapshots__/
+**/*.min.js
+**/*.min.css
+
+# Package Managers
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

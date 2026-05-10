@@ -1,0 +1,11 @@
+---
+description: Requisitos de teste e validação de código.
+globs: **/*
+---
+
+# Testes e Validação
+
+- **Unitários:** Crie testes unitários para funções utilitárias e lógica de negócio core.
+- **Cobertura:** Busque uma cobertura mínima de 80% em lógica crítica.
+- **Validação:** Sempre valide inputs e trate erros com try/catch e logs estruturados.
+- **Headless Testing:** Priorize testes de terminal e scripts de validação. Use o Browser apenas para validação de UI final.

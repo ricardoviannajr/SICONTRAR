@@ -1,0 +1,37 @@
+---
+description: Força a priorização de ferramentas CLI (git, gh, powershell, npm) sobre o uso do Browser Agent no ecossistema Antigravity.
+globs: *
+---
+
+# CLI-First & Headless Priority (Antigravity Exclusive)
+
+Este arquivo define a prioridade de ferramentas para o assistente Antigravity, visando máxima eficiência e operação headless.
+
+## Gatilhos de Decisão
+
+Sempre que precisar realizar as seguintes tarefas, utilize **OBRIGATORIAMENTE** a CLI antes de considerar o browser:
+
+1. **Acessar GitHub (Repos, PRs, Issues):**
+   - LISTAR: `gh issue list`, `gh pr list`, `gh repo view`.
+   - LER ARQUIVO REMOTO: `git show origin/master:path/to/file` ou `gh api repos/:owner/:repo/contents/:path`.
+   - CRIAR/EDITAR: `gh issue create`, `gh pr create`.
+
+2. **Ler Documentação Web:**
+   - PRIORIDADE 1: `read_url_content` (método headless).
+   - PRIORIDADE 2: `gh api` (se documentação estiver no GitHub).
+   - ÚLTIMO RECURSO: `browser_subagent` (somente se a página exigir JS para renderizar conteúdo vital).
+
+3. **Operações Git:**
+   - Sempre utilize `git` ou `gh auth git-credential` para autenticação.
+   - O uso do `browser_subagent` para "clicar em botões" de login é PROIBIDO.
+
+## Resiliência CLI
+
+- Se um comando CLI retornar erro de autenticação, invoque `antigravity/scripts/setup-headless-auth.ps1`.
+- Se um comando falhar por sintaxe, use `--help` para corrigir em vez de migrar para o browser.
+
+## Exceções Permitidas (Uso de Browser)
+
+- Validação visual de CSS/Layout.
+- Testes E2E que exigem interação humana simulada em tela.
+- Debug de erros que ocorrem exclusivamente no console do navegador.

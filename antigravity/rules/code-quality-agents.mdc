@@ -1,0 +1,23 @@
+---
+description: Padrões de qualidade de código, arquitetura e documentação didática.
+globs: **/*.{js,ts,py,ps1,go,java,c,cpp}
+---
+
+# Qualidade de Código e Documentação Didática
+
+## Arquitetura e Código
+
+- **DRY & KISS:** Evite repetição e complexidade desnecessária.
+- **Modularidade:** Funções pequenas (máx 30 linhas) e arquivos focados (máx 300 linhas).
+- **Complexidade:** Mantenha a complexidade ciclomática baixa (máx 10).
+- **Naming:** Use nomes descritivos e consistentes em português ou inglês conforme o projeto.
+
+## Documentação exaustiva (Nível Júnior)
+
+- **Comentários:** Todo código deve ser exaustivamente comentado.
+- **Didática:** Explique a lógica bloco por bloco. Imagine que um desenvolvedor Júnior dará manutenção.
+- **O "Porquê":** Foque em explicar o motivo das decisões técnicas, não apenas o que o código faz.
+
+## Refatoração
+
+- Sempre sugira melhorias de performance (O(n)) e segurança durante o desenvolvimento.
