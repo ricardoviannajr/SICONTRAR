@@ -2,9 +2,10 @@
 
 Este arquivo é a referência principal de comportamento do assistente. 
 
-Regras detalhadas por ferramenta: 
-- `AGENTS.md` (Legível por humanos e ferramentas)
-- `antigravity/GEMINI.md` (Fonte de Verdade)
+Regras detalhadas: 
+- `AGENTS.md` (Padrões de Código)
+- `GEMINI.md` (Governança e Protocolos)
+- `SKILLS.md` (Catálogo de Habilidades)
 
 > [!IMPORTANT]
 > **Regra de Ouro (Alerta de Mudança):** Sempre que uma nova regra sugerida pelo usuário alterar ou se sobrepor a uma regra existente nos arquivos de governança universal, o assistente DEVE alertar o usuário explicitamente sobre o conflito/mudança antes de atualizar os arquivos.
@@ -48,7 +49,7 @@ Quando iniciar trabalho relevante em um projeto do ecossistema:
 
 1. Se aplicável, confira a versão local de `AGENTS.md` e `GEMINI.md` (ou copie do AIConfig se o projeto usar bootstrap).
 2. **Memória Incremental:** Leia obrigatoriamente o arquivo **`MEMORIA.md`** na raiz do projeto (se existir) para recuperar o contexto vivo e decisões de sessões anteriores.
-3. Consulte, em toda solicitação do usuário, o `SKILLS.md` da pasta `antigravity/` para verificar se já existe inteligência (skill) pronta para executar a tarefa.
+3. Consulte, em toda solicitação do usuário, o `SKILLS.md` na raiz do projeto para verificar se já existe inteligência (skill) pronta para executar a tarefa.
 
 Não é obrigatório “sync-hard” em projetos de aplicação.
 
@@ -56,7 +57,7 @@ Não é obrigatório “sync-hard” em projetos de aplicação.
 
 ## 4. Skills, bootstrap e ignores
 
-- **Skills:** Em cada solicitação, consulte o `antigravity/SKILLS.md` e sugira invocação quando houver match claro. Instalação: `scripts/get-skill.ps1 -SkillId <ID>`.
+- **Skills:** Em cada solicitação, consulte o `SKILLS.md` (raiz) e sugira invocação quando houver match claro. Instalação: `scripts/get-skill.ps1 -SkillId <ID>`.
 - **Bootstrap:** Ao iniciar um projeto novo a partir deste mestre, copie os artefatos core (`.antigravityignore`, `AGENTS.md`, `GEMINI.md`, `SKILLS.md`, `walkthrough.md`, scripts) — ajuste `README` e `session_log` por projeto.
 - **Ignores:** Mantenha `.antigravityignore` em sincronia com a política do time.
 
@@ -118,6 +119,31 @@ Para garantir máxima eficiência e evitar interrupções por interfaces gráfic
 2. **Autenticação:** Toda interação com GitHub deve ser via `gh auth git-credential`. Nunca utilize métodos que possam disparar o navegador em ambiente headless.
 3. **Leitura de Documentação:** Utilize `gh api` para ler conteúdos do GitHub ou `read_url_content` para sites estáticos. O Browser Agent deve ser o **último recurso**, usado apenas para aplicações SPA complexas ou interações que exigem execução de JS pesado.
 4. **Resiliência CLI:** Se um comando CLI falhar, investigue o erro (`--help`, logs) antes de tentar o browser como "atalho".
+
+---
+
+## 10. Integridade Estrutural de Projeto (Project Lockdown)
+
+Todo projeto no ecossistema Antigravity deve manter conformidade com a estrutura base.
+O assistente é responsável por verificar e alertar — nunca por ignorar silenciosamente.
+
+### Artefatos Obrigatórios (todo projeto, sem exceção)
+
+| Arquivo | Propósito | Criado em |
+|---------|-----------|-----------|
+| `GEMINI.md` | Governança (cópia do mestre ou stub) | Bootstrap |
+| `AGENTS.md` | Padrões de código | Bootstrap |
+| `SKILLS.md` | Catálogo de skills disponíveis | Bootstrap |
+| `MEMORIA.md` | Contexto vivo entre sessões | Bootstrap |
+| `README.md` | Documentação premium do projeto | Bootstrap |
+| `.antigravityignore` | Política de arquivos ignorados | Bootstrap |
+
+### Regras de Enforcement
+
+1. **Check de Integridade:** No início de qualquer interação com um projeto, o assistente deve verificar silenciosamente a presença dos 6 artefatos obrigatórios. Se algum estiver ausente, alertar o usuário ANTES de iniciar a tarefa solicitada.
+2. **MEMORIA.md é sagrada:** Toda interação que altere código, arquitetura ou decisões técnicas DEVE terminar com atualização do `MEMORIA.md` usando o template padrão (`MEMORIA_TEMPLATE.md`). Sem checkpoint = interação incompleta.
+3. **Proibido desviar do padrão base:** Nenhum projeto pode ter uma versão customizada de `GEMINI.md` ou `AGENTS.md` que contradiga a fonte mestre (AIConfig), exceto adições locais explicitamente marcadas como `## [LOCAL]`.
+4. **Stubs são transitórios:** Arquivos com `# DEPRECADO (stub temporário)` devem ser resolvidos (substituídos pelo conteúdo real) na próxima interação com o projeto.
 
 ---
 
