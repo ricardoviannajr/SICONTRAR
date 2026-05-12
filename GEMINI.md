@@ -38,7 +38,9 @@ Regras detalhadas:
 ## 2. Segurança e limites
 
 - **Credenciais:** Nunca faça *hardcode* de segredos. Mantenha `.env.example` atualizado quando houver variáveis de ambiente.
-- **Execução:** Comandos destrutivos ou que alterem o sistema fora do projeto exigem confirmação do usuário.
+- **Execução:**
+    - Comandos destrutivos ou que alterem o sistema fora do projeto exigem confirmação do usuário.
+    - Comandos Git (`add`, `commit`, `push`) estão **pré-autorizados** e não exigem confirmação.
 - **Contexto:** Modifique apenas arquivos dentro do workspace acordado.
 
 ---
@@ -65,9 +67,9 @@ Não é obrigatório “sync-hard” em projetos de aplicação.
 
 ## 5. Estratégias cognitivas e qualidade
 
-- **Red Team (mental):** Revisar performance (ex.: complexidade), segurança e DRY antes de concluir mudanças grandes.
+- **Red Team (mental):** Revisar performance (ex.: complexidade O(n)), segurança e DRY antes de concluir mudanças grandes.
 - **Ambiguidade:** Não adivinhe; peça esclarecimentos se a tarefa for vaga.
-- **Problemas complexos:** Considere edge cases antes de propor soluções elaboradas.
+- **Chain of Thought:** Detalhe desafios e edge cases antes de propor soluções complexas. Raciocínio explícito reduz erros.
 - **Markdown:** Organize e clarifique arquivos `.md` que editar.
 - **Documentação Exaustiva (Nível Jr):** Todo código deve ser exaustivamente comentado. Pense que um desenvolvedor Júnior dará manutenção. Explique a lógica de forma primária e didática, bloco por bloco, detalhando o "porquê" além do "o quê".
 
@@ -144,6 +146,37 @@ O assistente é responsável por verificar e alertar — nunca por ignorar silen
 2. **MEMORIA.md é sagrada:** Toda interação que altere código, arquitetura ou decisões técnicas DEVE terminar com atualização do `MEMORIA.md` usando o template padrão (`MEMORIA_TEMPLATE.md`). Sem checkpoint = interação incompleta.
 3. **Proibido desviar do padrão base:** Nenhum projeto pode ter uma versão customizada de `GEMINI.md` ou `AGENTS.md` que contradiga a fonte mestre (AIConfig), exceto adições locais explicitamente marcadas como `## [LOCAL]`.
 4. **Stubs são transitórios:** Arquivos com `# DEPRECADO (stub temporário)` devem ser resolvidos (substituídos pelo conteúdo real) na próxima interação com o projeto.
+5. **Propagação Obrigatória:** Toda alteração em `GEMINI.md` ou `AGENTS.md` no AIConfig (fonte da verdade) **deve ser propagada imediatamente** para todos os destinos. Sem propagação = alteração incompleta.
+
+### Protocolo de Propagação (Obrigatório)
+
+Sempre que `GEMINI.md` ou `AGENTS.md` forem alterados no repositório AIConfig:
+
+1. **Commit e Push no AIConfig:** Confirmar a alteração na fonte da verdade primeiro.
+2. **Replicar para o Global:** Copiar o arquivo atualizado para `~/.gemini/` (regras globais do sistema).
+   ```powershell
+   Copy-Item "AIConfig\GEMINI.md" "$env:USERPROFILE\.gemini\GEMINI.md" -Force
+   ```
+3. **Propagar para todos os projetos:** Iterar sobre todos os repositórios em `$env:USERPROFILE\Documents\# Projetos Antigravity\` e sobrescrever o `GEMINI.md` (ou `AGENTS.md`) de cada projeto com a versão canônica, **preservando** seções marcadas como `## [LOCAL]`.
+   ```powershell
+   # Exemplo de propagação via PowerShell:
+   Get-ChildItem "$env:USERPROFILE\Documents\# Projetos Antigravity" -Directory |
+     Where-Object { $_.Name -ne "AIConfig" } |
+     ForEach-Object {
+       $dest = Join-Path $_.FullName "GEMINI.md"
+       if (Test-Path $dest) {
+         Copy-Item "AIConfig\GEMINI.md" $dest -Force
+         # Commit automático no projeto destino
+         git -C $_.FullName add GEMINI.md
+         git -C $_.FullName commit -m "[Sync: GEMINI.md atualizado via AIConfig]"
+         git -C $_.FullName push origin master 2>$null
+       }
+     }
+   ```
+4. **Validação:** Confirmar que o número de projetos atualizados corresponde ao total esperado. Reportar quaisquer falhas de push.
+
+> [!IMPORTANT]
+> **Seções `## [LOCAL]`** em projetos individuais devem ser preservadas durante a propagação. O assistente deve fazer merge inteligente: substituir o conteúdo canônico e **anexar** as seções locais ao final do arquivo.
 
 ---
 
