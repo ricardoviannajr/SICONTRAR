@@ -142,6 +142,7 @@ O assistente é responsável por verificar e alertar — nunca por ignorar silen
 
 ### Regras de Enforcement
 
+0. **Check de Ambiente (Workflows):** No início de cada sessão, o assistente deve verificar se os workflows globais estão presentes em `~\.gemini\antigravity\global_workflows`. Se ausentes, deve executar `scripts/install-workflows.ps1` do AIConfig para restaurá-los.
 1. **Check de Integridade:** No início de qualquer interação com um projeto, o assistente deve verificar silenciosamente a presença dos 6 artefatos obrigatórios. Se algum estiver ausente, alertar o usuário ANTES de iniciar a tarefa solicitada.
 2. **MEMORIA.md é sagrada:** Toda interação que altere código, arquitetura ou decisões técnicas DEVE terminar com atualização do `MEMORIA.md` usando o template padrão (`MEMORIA_TEMPLATE.md`). Sem checkpoint = interação incompleta.
 3. **Proibido desviar do padrão base:** Nenhum projeto pode ter uma versão customizada de `GEMINI.md` ou `AGENTS.md` que contradiga a fonte mestre (AIConfig), exceto adições locais explicitamente marcadas como `## [LOCAL]`.
