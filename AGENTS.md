@@ -2,7 +2,7 @@
 
 Este arquivo é a visão consolidada para humanos e ferramentas. 
 
-**Governança Geral** está em [`GEMINI.md`](GEMINI.md).
+**Governança Geral** está em [`Core.md`](Core.md).
 
 > [!IMPORTANT]
 > **Regra de Ouro:** Alertar o usuário antes de alterar/sobrepor regras existentes nos arquivos de governança.
@@ -42,16 +42,20 @@ Este arquivo é a visão consolidada para humanos e ferramentas.
 - **Tratamento:** Envolva chamadas de API externas em try/catch com tratamento de erro adequado.
 - **Logs técnicos:** Use o logger estruturado para depuração, evitando `console.log`.
 
-## 5. Regras de Máquina (antigravity/rules)
+## 5. Regras de Máquina (Architecture/rules)
 
-As regras de automação e comportamento estão versionadas em `antigravity/rules/` e devem ser seguidas rigorosamente.
+As regras de automação e comportamento estão versionadas em `Architecture/rules/` e devem ser seguidas rigorosamente.
 
 ## 4. Regras Operacionais Obrigatórias
 
-- **Git:** Ao final de cada interação, `add` / `commit` / `push`.
+- **Auto-Pilot:** Após a aprovação inicial de um plano ou tarefa, o Colaborador deve agir de forma autônoma, realizando todas as edições, comandos e commits necessários sem interromper o usuário para confirmações intermediárias.
+- **Git:** Ao final de cada interação, `add` / `commit` / `push`. Mandatório e pré-autorizado.
 - **Tooling Selection:** CLI over Browser. Prefira ferramentas de linha de comando (`gh`, `git`, `ps1`) para TODAS as tarefas, exceto validação de UI visual ou interações com SPAs dinâmicos.
 - **Skills:** Consultar `SKILLS.md` em toda nova solicitação.
-- **Memória:** Atualizar **`MEMORIA.md`** em checkpoints de consciência. **Obrigatório:** Detalhar decisões técnicas, obstáculos ("pulo do gato") e lições aprendidas, evitando resumos rasos de tarefas.
+- **Memória:** Atualizar **`MEMORIA.md`** em checkpoints de consciência. **Obrigatório:** Detalhar decisões técnicas, obstáculos ("pulo do gato") e lições aprendidas. A atualização deve ser **EXAUSTIVA**, funcionando como um log técnico profundo (incluindo snippets de lógica crítica, caminhos de rede e estados de variáveis) para garantir a continuidade perfeita entre sessões.
+- **Higiene de Contexto (Tokens):** Após atualizar a **`MEMORIA.md`**, o assistente DEVE sugerir o encerramento da sessão ou limpeza de contexto se o consumo de tokens estiver elevado, garantindo que o próximo ciclo inicie com o "briefing" destilado.
 
+- **Invisibilidade (Regra 11):** É proibido deixar qualquer rastro de Desenvolvedor no código ou documentação. Substitua termos como "Desenvolvedor" ou "Módulo" por "Desenvolvedor" ou "Padrão do Sistema".
 
 ---
+
