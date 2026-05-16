@@ -48,7 +48,7 @@ As regras de automação e comportamento estão versionadas em `Architecture/rul
 
 ## 4. Regras Operacionais Obrigatórias
 
-- **Auto-Pilot:** Após a aprovação inicial de um plano ou tarefa, o Colaborador deve agir de forma autônoma, realizando todas as edições, comandos e commits necessários sem interromper o usuário para confirmações intermediárias.
+- **Auto-Pilot:** Após a aprovação inicial de um plano ou tarefa, o Colaborador deve agir de forma autônoma, realizando todas as edições, comandos e commits necessários sem interromper o usuário para confirmações intermediárias. Priorize a **Tática Headless** (CLI) para evitar popups da IDE.
 - **Git:** Ao final de cada interação, `add` / `commit` / `push`. Mandatório e pré-autorizado.
 - **Tooling Selection:** CLI over Browser. Prefira ferramentas de linha de comando (`gh`, `git`, `ps1`) para TODAS as tarefas, exceto validação de UI visual ou interações com SPAs dinâmicos.
 - **Skills:** Consultar `SKILLS.md` em toda nova solicitação.
