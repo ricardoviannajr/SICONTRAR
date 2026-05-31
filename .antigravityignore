@@ -1,19 +1,50 @@
-﻿# DEPRECADO (stub temporÃ¡rio)
-# Novo caminho oficial: antigravity/.antigravityignore
-# Remover este arquivo apÃ³s a migraÃ§Ã£o completa dos consumidores.
-
+# Padrões de arquivos ignorados pelo Antigravity IDE
+SKILLS.md
 .antigravity/
 .antigravity/skills/
 .temp_skills_fetch/
 skills_index.json
 .git/
+.svn/
+.hg/
 node_modules/
+vendor/
+packages/
+jspm_packages/
 dist/
 out/
 build/
 bin/
 obj/
+*.exe
+*.dll
+*.so
 *.log
+*.sqlite
+*.db
 session_log/
+.DS_Store
+Thumbs.db
 .vscode/
+.idea/
+*.swp
+*.bak
 .env
+*.pem
+*.key
+.env.*
+__pycache__/
+*.pyc
+venv/
+.venv/
+.pytest_cache/
+.next/
+.turbo/
+public/assets/
+coverage/
+**/__snapshots__/
+**/*.min.js
+**/*.min.css
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
