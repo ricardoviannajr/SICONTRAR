@@ -55,7 +55,10 @@ Quando iniciar trabalho relevante em um projeto do ecossistema:
 
 1. Se aplicÃ¡vel, confira a versÃ£o local de `AGENTS.md` e `Core.md` (ou copie do AIConfig se o projeto usar bootstrap).
 2. **MemÃ³ria Incremental:** Leia obrigatoriamente o arquivo **`MEMORIA.md`** na raiz do projeto (se existir) para recuperar o contexto vivo e decisÃµes de sessÃµes anteriores.
-3. **Consulta de InteligÃªncia Eficiente:** Consulte o `SKILLS.md` na raiz do projeto apenas sob demanda explÃ­cita do usuÃ¡rio ou quando houver real necessidade de identificar um automaÃ§Ã£o complexa para a tarefa atual, evitando ler o catÃ¡logo completo em chamadas triviais.
+3. **Consulta de InteligÃªncia Eficiente (Economia de Tokens):** Ã‰ **PROIBIDO** ler o arquivo `SKILLS.md` diretamente (214KB, ~50K tokens). Em vez disso:
+   - **Passo 1:** Leia o `SKILLS_SUMMARY.md` (~40 linhas, Ã­ndice leve com categorias e contagens).
+   - **Passo 2:** Se necessÃ¡rio localizar uma skill especÃ­fica, use `grep_search` no `SKILLS.md` com a palavra-chave desejada.
+   - **Nunca** abra o catÃ¡logo completo, mesmo sob demanda explÃ­cita â€” o summary + grep cobre 100% dos casos.
 
 NÃ£o Ã© obrigatÃ³rio â€œsync-hardâ€ em projetos de aplicaÃ§Ã£o.
 
@@ -63,7 +66,7 @@ NÃ£o Ã© obrigatÃ³rio â€œsync-hardâ€ em projetos de aplicaÃ§Ã£
 
 ## 4. Skills, bootstrap e ignores
 
-- **Skills:** Consulte o `SKILLS.md` (raiz) de forma pontual ou quando houver solicitaÃ§Ã£o direta para identificar se existe inteligÃªncia pronta para invocar. InstalaÃ§Ã£o: `scripts/get-skill.ps1 -SkillId <ID>`.
+- **Skills:** Consulte o `SKILLS_SUMMARY.md` (Ã­ndice leve) para orientaÃ§Ã£o rÃ¡pida. Para busca direcionada, use `grep_search` no `SKILLS.md`. **NUNCA** leia o arquivo `SKILLS.md` inteiro. InstalaÃ§Ã£o: `scripts/get-skill.ps1 -SkillId <ID>`.
 - **Bootstrap:** Ao iniciar um projeto novo a partir deste mestre, copie os artefatos core (`.antigravityignore`, `AGENTS.md`, `Core.md`, `SKILLS.md`, `walkthrough.md`, scripts) â€” ajuste `README` e `session_log` por projeto.
 - **Ignores:** Mantenha `.antigravityignore` em sincronia com a polÃ­tica do time.
 
@@ -96,6 +99,7 @@ NÃ£o Ã© obrigatÃ³rio â€œsync-hardâ€ em projetos de aplicaÃ§Ã£
 Dada a volatilidade das janelas de contexto das IAs, o sistema de memÃ³ria incremental Ã© vital:
 
 - **Escrita DinÃ¢mica (`MEMORIA.md`):** A cada conclusÃ£o de tarefa significativa ou mudanÃ§a de direÃ§Ã£o, atualize o arquivo **`MEMORIA.md`** na raiz com um **Ponto de Controle de Desenvolvimento**. Esta atualizaÃ§Ã£o deve ser **CONCISA e DIRETA**: utilize bullet points descrevendo o status atual, as decisÃµes vitais e a prÃ³xima tarefa imediata. O objetivo Ã© reconstruir o contexto sem devorar tokens com resumos verbosos.
+- **Limite de Tamanho (Economia de Tokens):** O `MEMORIA.md` deve ter no mÃ¡ximo **50 linhas**. Se ultrapassar, rotacione imediatamente: mova o conteÃºdo excedente para `session_log/YYYY-MM-DD.md` e mantenha apenas o checkpoint mais recente.
 - **ConsolidaÃ§Ã£o (`session_log/`):** No final de uma interaÃ§Ã£o diÃ¡ria ou ciclo de entrega (antes do push final), transfira as liÃ§Ãµes aprendidas e o progresso consolidado da **`MEMORIA.md`** para o log de sessÃ£o (`YYYY-MM-DD.md`) e limpe/rotacione a memÃ³ria para a prÃ³xima sessÃ£o.
 - **Resumo Executivo:** Evite logs tÃ©cnicos extensos, trechos de cÃ³digo e transcripts. Foque no estado da mÃ¡quina de forma minimalista.
 
@@ -146,15 +150,65 @@ O Colaborador Ã© responsÃ¡vel por verificar e alertar â€” nunca por ign
 
 ### Regras de Enforcement
 
-0. **Check de Ambiente (Workflows):** No inÃ­cio de cada sessÃ£o, o Colaborador deve verificar se os workflows globais estÃ£o presentes na pasta correspondente Ã  versÃ£o instalada da IDE no Windows:
-   - VersÃ£o Gemini/Config: `~\.gemini\config\global_workflows`
-   - VersÃ£o Antigravity IDE: `~\.gemini\antigravity-ide\global_workflows`
-   - VersÃ£o Antigravity: `~\.gemini\antigravity\global_workflows`
-   - VersÃ£o Core/Architecture: `~\.Core\Architecture\global_workflows`
-   Se os workflows estiverem ausentes no diretÃ³rio correspondente Ã  IDE ativa, execute `scripts/install-workflows.ps1` do AIConfig para instalÃ¡-los ou restaurÃ¡-los.
+0. **Check de Ambiente (Workflows â€” Economia de Tokens):** No inÃ­cio de cada sessÃ£o, o Colaborador deve detectar automaticamente a IDE ativa e verificar workflows com **uma Ãºnica operaÃ§Ã£o** (nÃ£o mÃºltiplas chamadas). A detecÃ§Ã£o segue esta lÃ³gica:
+   - Identifique o diretÃ³rio App Data informado no contexto do sistema (ex.: `~\.gemini\antigravity-ide` â†’ pasta correta Ã© `~\.gemini\antigravity-ide\global_workflows`).
+   - Verifique a existÃªncia com um Ãºnico `list_dir` ou `Test-Path`.
+   - Se ausente, execute `scripts/install-workflows.ps1` do AIConfig.
+   - **Proibido** testar mÃºltiplos caminhos sequencialmente â€” use a informaÃ§Ã£o do contexto do sistema para determinar o caminho correto de primeira.
 1. **Check de Integridade:** No inÃ­cio de qualquer interaÃ§Ã£o com um projeto, o Colaborador deve verificar silenciosamente a presenÃ§a dos 6 artefatos obrigatÃ³rios. Se algum estiver ausente, alertar o usuÃ¡rio ANTES de iniciar a tarefa solicitada.
 2. **MEMORIA.md Ã© sagrada:** Toda interaÃ§Ã£o que altere cÃ³digo, arquitetura ou decisÃµes tÃ©cnicas DEVE terminar com atualizaÃ§Ã£o do `MEMORIA.md` usando o template padrÃ£o (`MEMORIA_TEMPLATE.md`). Sem checkpoint = interaÃ§Ã£o incompleta.
 3. **Proibido desviar do padrÃ£o base:** Nenhum projeto pode ter uma versÃ£o customizada de `Core.md` ou `AGENTS.md` que contradiga a fonte mestre (AIConfig), exceto adiÃ§Ãµes locais explicitamente marcadas como `## [LOCAL]`.
+4. **Stubs sÃ£o transitÃ³rios:** Arquivos com `# DEPRECADO (stub temporÃ¡rio)` devem ser resolvidos (substituÃ­dos pelo conteÃºdo real) na prÃ³xima interaÃ§Ã£o com o projeto.
+5. **PropagaÃ§Ã£o ObrigatÃ³ria:** Toda alteraÃ§Ã£o em `Core.md` ou `AGENTS.md` no AIConfig (fonte da verdade) **deve ser propagada imediatamente** para todos os destinos. Sem propagaÃ§Ã£o = alteraÃ§Ã£o incompleta.
+
+### Protocolo de PropagaÃ§Ã£o (ObrigatÃ³rio)
+
+Sempre que `Core.md` or `AGENTS.md` forem alterados no repositÃ³rio AIConfig:
+
+1. **Commit e Push no AIConfig:** Confirmar a alteraÃ§Ã£o na fonte da verdade primeiro.
+2. **Replicar para o Global:** Copiar o arquivo atualizado para `~/.Core/` (regras globais do sistema).
+   ```powershell
+   Copy-Item "AIConfig\Core.md" "$env:USERPROFILE\.Core\Core.md" -Force
+   ```
+3. **Propagar para todos os projetos:** Iterar sobre todos os repositÃ³rios em `$env:USERPROFILE\Documents\# Projetos Architecture\` e sobrescrever o `Core.md` (ou `AGENTS.md`) de cada projeto com a versÃ£o canÃ´nica, **preservando** seÃ§Ãµes marcadas como `## [LOCAL]`.
+   ```powershell
+   # Exemplo de propagaÃ§Ã£o via PowerShell:
+   Get-ChildItem "$env:USERPROFILE\Documents\# Projetos Architecture" -Directory |
+     Where-Object { $_.Name -ne "AIConfig" } |
+     ForEach-Object {
+       $dest = Join-Path $_.FullName "Core.md"
+       if (Test-Path $dest) {
+         Copy-Item "AIConfig\Core.md" $dest -Force
+         # Commit automÃ¡tico no projeto destino
+         git -C $_.FullName add Core.md
+         git -C $_.FullName commit -m "[Sync: Core.md atualizado via AIConfig]"
+         git -C $_.FullName push origin master 2>$null
+       }
+     }
+   ```
+4. **ValidaÃ§Ã£o:** Confirmar que o nÃºmero de projetos atualizados corresponde ao total esperado. Reportar quaisquer falhas de push.
+
+> [!IMPORTANT]
+> **SeÃ§Ãµes `## [LOCAL]`** em projetos individuais devem ser preservadas durante a propagaÃ§Ã£o. O Colaborador deve fazer merge inteligente: substituir o conteÃºdo canÃ´nico e **anexar** as seÃ§Ãµes locais ao final do arquivo.
+
+---
+
+## 11. Invisibilidade (Stealth Mode)
+
+Esta regra sobrepÃµe qualquer outra referente a identidade visual ou textual:
+
+- **ProibiÃ§Ã£o de IdentificaÃ§Ã£o:** Ã‰ terminantemente proibido o uso de termos que identifiquem a origem nÃ£o-humana do cÃ³digo. Exemplos de termos proibidos (nÃ£o utilizar): "I-A", "A-I", "B-o-t", "Assis-tente", "Anti-gravity", "Gemi-ni".
+- **Tom Humano:** O cÃ³digo e a documentaÃ§Ã£o devem ser escritos como se tivessem sido criados integralmente por um desenvolvedor humano de nÃ­vel sÃªnior.
+- **RemoÃ§Ã£o de Metadados:** Qualquer metadado que indique a participaÃ§Ã£o de sistemas automatizados na criaÃ§Ã£o do artefato deve ser removido ou anonimizado.
+- **Nomenclatura:** Termos tÃ©cnicos devem soar como decisÃµes de engenharia humana. Use "Ponto de Controle de Desenvolvimento" ou "Resumo TÃ©cnico" em vez de termos sensoriais.
+- **Emojis:** Remova emojis que remetam a tecnologia artificial ou automaÃ§Ã£o.
+
+---
+
+*Mantido por ricardoviannajr â€” Exclusive Architecture.*
+
+
+## [LOCAL]`.
 4. **Stubs sÃ£o transitÃ³rios:** Arquivos com `# DEPRECADO (stub temporÃ¡rio)` devem ser resolvidos (substituÃ­dos pelo conteÃºdo real) na prÃ³xima interaÃ§Ã£o com o projeto.
 5. **PropagaÃ§Ã£o ObrigatÃ³ria:** Toda alteraÃ§Ã£o em `Core.md` ou `AGENTS.md` no AIConfig (fonte da verdade) **deve ser propagada imediatamente** para todos os destinos. Sem propagaÃ§Ã£o = alteraÃ§Ã£o incompleta.
 
@@ -346,6 +400,7 @@ Sempre que `GEMINI.md` ou `AGENTS.md` forem alterados no repositÃ³rio AIConfig
 ---
 
 *Mantido por ricardoviannajr â€” Antigravity Exclusive.*
+
 
 
 
