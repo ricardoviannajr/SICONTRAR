@@ -1,4 +1,4 @@
-# Agentes Especializados e Padrões de Código (AIConfig)
+﻿# Agentes Especializados e Padrões de Código (AIConfig)
 
 Este arquivo é a visão consolidada para humanos e ferramentas. 
 
@@ -48,6 +48,7 @@ As regras de automação e comportamento estão versionadas em `rules/` (arquivo
 
 ## 6. Regras Operacionais Obrigatórias
 
+- **Memória RAG (NotebookLM):** É mandatório realizar chamadas MCP ao caderno 'AIConfig - Governança Core' no NotebookLM antes de propor ou executar edições estruturais no código, mantendo o consumo local de tokens enxuto.
 - **Auto-Pilot:** Após a aprovação inicial de um plano ou tarefa, o Colaborador deve agir de forma autônoma, realizando todas as edições, comandos e commits necessários sem interromper o usuário para confirmações intermediárias. Priorize as ferramentas nativas de arquivos do Agente para evitar popups de autorização da IDE.
 - **Git:** Ao final de cada interação, `add` / `commit` / `push`. Mandatório, pré-autorizado, e executado via terminal com `SafeToAutoRun: true`.
 - **Tooling Selection:** Ferramentas Nativas > CLI > Browser. Prefira ferramentas nativas do Agente (`write_to_file`, `replace_file_content`, etc.) para edição de arquivos; ferramentas CLI (`git`, `gh`, etc.) para controle de versão; e o Browser apenas como último recurso.
