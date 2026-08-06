@@ -1,5 +1,4 @@
-﻿# Contexto e Caderno do Projeto
-
-- **Nome do Caderno:** SICONTRAR github
-- **RepositÃ³rio GitHub:** https://github.com/ricardoviannajr/SICONTRAR
-- **Regra de Consulta RAG:** Antes de implementaÃ§Ãµes estruturais, consulte o caderno no NotebookLM via MCP.
+# Memória do Projeto no NotebookLM
+- Caderno: SICONTRAR github
+- Coleção: Projetos Antigravity
+- URL: https://notebook.google.com/notebook/a16dc7aa-9b0b-401c-8a58-ef21624ed96e
