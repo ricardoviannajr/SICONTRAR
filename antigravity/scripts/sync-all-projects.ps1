@@ -9,7 +9,7 @@
 
 $rootPath = Join-Path $env:USERPROFILE "Documents\projetos antigravity"
 if (-not (Test-Path $rootPath)) {
-    $rootPath = Join-Path $env:USERPROFILE "Documents\# Projetos Antigravity"
+    $rootPath = Join-Path $env:USERPROFILE "Documents\Projetos Antigravity"
 }
 $directories = Get-ChildItem -Path $rootPath -Directory
 

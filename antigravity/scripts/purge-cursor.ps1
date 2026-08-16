@@ -5,7 +5,7 @@
 #   Este script percorre a pasta de projetos, remove diretórios/arquivos do Cursor 
 #   e sincroniza a nova governança Antigravity Exclusive a partir do repositório AIConfig.
 
-$ProjectsRoot = "C:\Users\ricar\Documents\# Projetos Antigravity"
+$ProjectsRoot = "C:\Users\ricar\Documents\Projetos Antigravity"
 $AIConfigRoot = Join-Path $ProjectsRoot "AIConfig"
 
 Write-Host "Iniciando Operação Antigravity Exclusive (Purge Cursor)..." -ForegroundColor Cyan

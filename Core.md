@@ -1,4 +1,4 @@
-﻿# Regras de Governança (AIConfig)
+# Regras de Governança (AIConfig)
 
 Este arquivo é a referência principal de comportamento do Colaborador. 
 
@@ -483,10 +483,10 @@ Sempre que `GEMINI.md` ou `AGENTS.md` forem alterados no repositÃ³rio AIConfig
    ```powershell
    Copy-Item "AIConfig\GEMINI.md" "$env:USERPROFILE\.gemini\GEMINI.md" -Force
    ```
-3. **Propagar para todos os projetos:** Iterar sobre todos os repositÃ³rios em `$env:USERPROFILE\Documents\# Projetos Antigravity\` e sobrescrever o `GEMINI.md` (ou `AGENTS.md`) de cada projeto com a versÃ£o canÃ´nica, **preservando** seÃ§Ãµes marcadas como `## [LOCAL]`.
+3. **Propagar para todos os projetos:** Iterar sobre todos os repositÃ³rios em `$env:USERPROFILE\Documents\Projetos Antigravity\` e sobrescrever o `GEMINI.md` (ou `AGENTS.md`) de cada projeto com a versÃ£o canÃ´nica, **preservando** seÃ§Ãµes marcadas como `## [LOCAL]`.
    ```powershell
    # Exemplo de propagaÃ§Ã£o via PowerShell:
-   Get-ChildItem "$env:USERPROFILE\Documents\# Projetos Antigravity" -Directory |
+   Get-ChildItem "$env:USERPROFILE\Documents\Projetos Antigravity" -Directory |
      Where-Object { $_.Name -ne "AIConfig" } |
      ForEach-Object {
        $dest = Join-Path $_.FullName "GEMINI.md"
