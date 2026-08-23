@@ -316,6 +316,57 @@ Esta regra sobrepÃµe qualquer outra referente a identidade visual ou textual:
 
 
 ## [LOCAL]`.
+4. **Stubs sÃ£o transitÃ³rios:** Arquivos com `# DEPRECADO (stub temporÃ¡rio)` devem ser resolvidos (substituÃ­dos pelo conteÃºdo real) na prÃ³xima interaÃ§Ã£o com o projeto.
+5. **PropagaÃ§Ã£o ObrigatÃ³ria:** Toda alteraÃ§Ã£o em `Core.md` ou `AGENTS.md` no AIConfig (fonte da verdade) **deve ser propagada imediatamente** para todos os destinos. Sem propagaÃ§Ã£o = alteraÃ§Ã£o incompleta.
+
+### Protocolo de PropagaÃ§Ã£o (ObrigatÃ³rio)
+
+Sempre que `Core.md` or `AGENTS.md` forem alterados no repositÃ³rio AIConfig:
+
+1. **Commit e Push no AIConfig:** Confirmar a alteraÃ§Ã£o na fonte da verdade primeiro.
+2. **Replicar para o Global:** Copiar o arquivo atualizado para `~/.Core/` (regras globais do sistema).
+   ```powershell
+   Copy-Item "AIConfig\Core.md" "$env:USERPROFILE\.Core\Core.md" -Force
+   ```
+3. **Propagar para todos os projetos:** Iterar sobre todos os repositÃ³rios em `$env:USERPROFILE\Documents\projetos antigravity\` e sobrescrever o `Core.md` (ou `AGENTS.md`) de cada projeto com a versÃ£o canÃ´nica, **preservando** seÃ§Ãµes marcadas como `## [LOCAL]`.
+   ```powershell
+   # Exemplo de propagaÃ§Ã£o via PowerShell:
+   Get-ChildItem "$env:USERPROFILE\Documents\projetos antigravity" -Directory |
+     Where-Object { $_.Name -ne "AIConfig" } |
+     ForEach-Object {
+       $dest = Join-Path $_.FullName "Core.md"
+       if (Test-Path $dest) {
+         Copy-Item "AIConfig\Core.md" $dest -Force
+         # Commit automÃ¡tico no projeto destino
+         git -C $_.FullName add Core.md
+         git -C $_.FullName commit -m "[Sync: Core.md atualizado via AIConfig]"
+         git -C $_.FullName push origin master 2>$null
+       }
+     }
+   ```
+4. **ValidaÃ§Ã£o:** Confirmar que o nÃºmero de projetos atualizados corresponde ao total esperado. Reportar quaisquer falhas de push.
+
+> [!IMPORTANT]
+> **SeÃ§Ãµes `## [LOCAL]`** em projetos individuais devem ser preservadas durante a propagaÃ§Ã£o. O Colaborador deve fazer merge inteligente: substituir o conteÃºdo canÃ´nico e **anexar** as seÃ§Ãµes locais ao final do arquivo.
+
+---
+
+## 11. Invisibilidade (Stealth Mode)
+
+Esta regra sobrepÃµe qualquer outra referente a identidade visual ou textual:
+
+- **ProibiÃ§Ã£o de IdentificaÃ§Ã£o:** Ã‰ terminantemente proibido o uso de termos que identifiquem a origem nÃ£o-humana do cÃ³digo. Exemplos de termos proibidos (nÃ£o utilizar): "I-A", "A-I", "B-o-t", "Assis-tente", "Anti-gravity", "Gemi-ni".
+- **Tom Humano:** O cÃ³digo e a documentaÃ§Ã£o devem ser escritos como se tivessem sido criados integralmente por um desenvolvedor humano de nÃ­vel sÃªnior.
+- **RemoÃ§Ã£o de Metadados:** Qualquer metadado que indique a participaÃ§Ã£o de sistemas automatizados na criaÃ§Ã£o do artefato deve ser removido ou anonimizado.
+- **Nomenclatura:** Termos tÃ©cnicos devem soar como decisÃµes de engenharia humana. Use "Ponto de Controle de Desenvolvimento" ou "Resumo TÃ©cnico" em vez de termos sensoriais.
+- **Emojis:** Remova emojis que remetam a tecnologia artificial ou automaÃ§Ã£o.
+
+---
+
+*Mantido por ricardoviannajr â€” Exclusive Antigravity.*
+
+
+## [LOCAL]`.
 4. **Stubs sÃƒÂ£o transitÃƒÂ³rios:** Arquivos com `# DEPRECADO (stub temporÃƒÂ¡rio)` devem ser resolvidos (substituÃƒÂ­dos pelo conteÃƒÂºdo real) na prÃƒÂ³xima interaÃƒÂ§ÃƒÂ£o com o projeto.
 5. **PropagaÃƒÂ§ÃƒÂ£o ObrigatÃƒÂ³ria:** Toda alteraÃƒÂ§ÃƒÂ£o em `Core.md` ou `AGENTS.md` no AIConfig (fonte da verdade) **deve ser propagada imediatamente** para todos os destinos. Sem propagaÃƒÂ§ÃƒÂ£o = alteraÃƒÂ§ÃƒÂ£o incompleta.
 
@@ -558,6 +609,7 @@ Sempre que `GEMINI.md` ou `AGENTS.md` forem alterados no repositÃƒÂ³rio AICo
 ---
 
 *Mantido por ricardoviannajr Ã¢â‚¬â€ Antigravity Exclusive.*
+
 
 
 
